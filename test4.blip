@@ -1,0 +1,22 @@
+ var x 42
+ text "output x -- " output x text \n
+ set x + x 1
+text "after increment, output x -- " output x text \n
+ text "output ~ x -- " output  ~ x text \n
+ text "Hello World\n"
+
+ // var x 42
+ // output - 5 4
+ // output x
+ // var y 20
+ // text "Hello World\n"
+ // set y 99
+ // output y
+ // set y 21
+ // set x 31
+ // output - y x
+ // output - x y
+ // output ~ + 5 4
+ // output + 5 ~ 4
+ // output 1
+

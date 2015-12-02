@@ -1,0 +1,206 @@
+/*
+ * HashMap.h
+ *
+ *  Created on: Nov 14, 2015
+ *      Author: kevin
+ */
+
+#ifndef HASHMAP_H_
+#define HASHMAP_H_
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include "Parse.h"
+#include "String.h"
+
+class LinkedHashEntry {
+private:
+      String variable;
+      int value;
+      LinkedHashEntry* next;
+public:
+
+      LinkedHashEntry(void) {
+      this->variable = "";
+      this->value = 0;
+      this->next = NULL;
+      }
+
+      LinkedHashEntry(String key, int value){
+    	  this->variable = key;
+    	  this->value=value;
+    	  this->next = NULL;
+      }
+
+      String getKey(){
+    	return variable;
+    }
+
+      int getValue() {
+        return value;
+     }
+
+
+    void setKey(String key){
+    	this->variable = key;
+    }
+
+    void setValue(int value){
+    	this->value = value;
+    }
+
+
+    int getHash(int M){
+    	int index =0;
+    	for (int i=0; i<variable.size();i++){
+    		index *= 33;
+    		index += (int) variable[i];
+
+    	}
+    	index = index%M;
+    	return index;
+    }
+
+    LinkedHashEntry* getNext(){
+    	return next;
+    }
+
+    void setNext(LinkedHashEntry* next){
+    	this->next = next;
+    }
+
+~LinkedHashEntry(void){
+	this->variable = "";
+	this->value = 0;
+}
+
+
+};
+
+const int TABLE_SIZE = 128;
+template <typename T,typename K>
+class HashTable{
+private:
+	LinkedHashEntry **table;
+public:
+	  HashTable(){
+	  table = new LinkedHashEntry*[TABLE_SIZE];
+	  for (int i = 0; i < TABLE_SIZE; i++)
+	  table[i] = NULL;
+	      }
+
+	  bool put(T newRecord) {
+		 int hash = (newRecord.getHash(TABLE_SIZE));//hash already accounts for table size
+
+	           // while (table[hash] != NULL && table[hash]->getKey() != newRecord.getKey())//sure there can be two identical keys
+	                  //hash = (hash + 1) % TABLE_SIZE;
+	            //if (table[hash] != NULL){
+	            	//return false; // the first thing we worry about now is if this is our first value. We can initliaze our key
+	            }
+	            //else{
+
+	            //table[hash] = new LinkedHashEntry(newRecord);
+	            //return true;
+
+if(table[hash] == NULL){
+	table[hash] = new LinkedHashEntry(newRecord); 
+else{
+	LinkedHashEntry* entry = table[hash];// not sure what this does... entry has a key, value and address
+	while(entry->getNext()!=NULL){//create the linked list chains 
+		entry = entry->getNext(); //
+	if(entry->getKey() == key){
+		entry->setValue(
+	            }
+	      }
+
+	  bool reassign(T newRecord){
+		  int hash = (newRecord.getHash(TABLE_SIZE));
+		  while (table[hash] != NULL && table[hash]->getKey() != newRecord.getKey()){
+			  hash = (hash + 1) % TABLE_SIZE;
+		  }
+		  if (table[hash] == NULL){return false;}
+
+		   if(table[hash]->getKey() == newRecord.getKey()){
+			   table[hash] ->setValue(newRecord.getValue());
+			   return true;
+
+	  }
+	  }
+	  int get(K key) {
+		  T tempRecord;
+		  tempRecord.setKey(key);
+	            int hash = (tempRecord.getHash(TABLE_SIZE));
+	            while (table[hash] != NULL && table[hash]->getKey() != key)
+	                  hash = (hash + 1) % TABLE_SIZE;
+	            if (table[hash] == NULL)
+	                  return -1;
+	            else
+	                  return table[hash]->getValue();
+	      }
+
+
+	  bool isMemberof(K key){
+//		  	  int searchvalue= get(key);
+//		  	uint32_t start =0;
+//		  	uint32_t end = TABLE_SIZE;
+//
+//		  	while(start<end-1){
+//		  		uint32_t mid = (start+end)/2;
+//
+//		  		if(key < table[mid]->getKey()){
+//		  			end = mid;
+//		  		}
+//		  		else{
+//		  			start = mid;
+//		  		}
+//
+//		  	}
+//		  	if(key == table[start]->getKey()){
+//		  		return true;
+//		  	}
+//		  	else{ return false;}
+		  //return this;
+		  }
+
+
+
+
+
+	  void resetHashTable() {
+		  for (int i = 0; i < TABLE_SIZE; i++){
+		  			      if (table[i] != NULL){
+		  			    	  table[i]->setKey("");
+		  			      }
+
+		  			      }
+
+
+	  }
+
+
+	  ~HashTable(){
+			 // String clear(" ");
+
+				  int flag =0;
+			    for (int i = 0; i < TABLE_SIZE; i++){
+			      if (table[i] != NULL){
+			    	  //table[i]-> setKey() = clear;
+			        delete table[i];
+
+			      }
+
+			    }
+			    delete[] table;
+	  			  }
+
+
+
+	  };
+
+
+
+
+
+
+
+#endif /* HASHMAP_H_ */

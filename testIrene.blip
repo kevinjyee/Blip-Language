@@ -1,0 +1,52 @@
+text "Irene is so confused about this program\n"
+text comment // testing if this comment fucks everything up
+text "\nblah blah blah\n" // hopefully this one doesn't fuck stuff up either
+// comment comment comment blah blah blah
+text hello
+text \n
+set Irene 12
+set a 4
+set b 6
+set c 7
+var d 0
+set a 1
+var Irene 1
+var a = 1
+var b = 6
+var c = 7
+output + + 1 2 + 3 Irene  
+text " -- answer is 7\n"
+output + + + + 3 4 + 5 6 + 7 8 + 9 10
+text " -- answer is 52\n" 
+ output + ~ * 3 4 && 4 5 // 
+ text " -- answer is -11\n"
+output * * + a b / c Irene b //  (1 + 6/7) 1 1
+text " -- answer is 294\n"
+output ~ * % 10 / 6 2 + 0 4 
+text " -- answer is -4\n"
+output ~ ~ ~ ~ ~ ~ ~ ~ ~ + 4 * 5 5
+text " -- answer is -29\n"
+output + - < >= ~ 4 a b c d 
+text " -- answer is -6 (I think...)\n"
+output % 10 * && 5 1 || 1 0 
+text " -- answer is 0\n"
+
+
+// Correct Output 
+// Irene is so confused about this program
+// comment 
+// blah blah blah
+// hello
+// variable Irene does not exist
+// variable a does not exist
+// variable b does not exist 
+// variable c does not exist 
+// variable Irene incorrectly re-initialized 
+// 7 -- answer is 7
+// 52 -- answer is 52
+// -11 -- answer is -11 
+// 294 -- answer is 294
+// -4 -- answer is -4 
+// -29 -- answer is -29
+// -6 -- answer is -6 (I think...) 
+// 0 -- answer is 0

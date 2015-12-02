@@ -1,0 +1,66 @@
+// Test text
+ text Hello text \n
+ text "Hello World" text \n
+ text "" // // <- doesn't like this..undefined behavior
+ text \n
+ text 123456789 text \n
+ text 5 text \n
+
+// Test output
+ output + + 1 3 + 2 4        // Should output 10
+ text \n
+ output + 1 1                // Should output 2
+ text \n
+ var x 3                     // x = 3
+ var x 5
+ output x
+ var y * x 2                 // y = 6
+ output * x x                // Should output 9
+ text \n
+ output + * x x * y y        // Should output 45
+ text \n
+ set x * x y                 // x = 3*6 = 18
+ output x                    // Should output 18
+ text \n
+ output ~ ! + * x x * y y	// should output 0
+ output + * 4 4 3			// should output 19
+ output + * 4 4 ~ 3			// should ouput 13
+ output  * y ~ y 	// should output -36
+ 
+// Test var
+ var x 1
+ var x 42                    // Should give an error
+ var y + x 1                 // y = 43
+ output x
+ text \n
+ output y
+ text \n
+
+// Test set
+ set w 42                  // Should give an error
+ var w 20                  // Should also give an error
+ output - w w              // Output 0
+ text \n
+ set w / 42 20             // w = 2
+ output w                  // Should output 2
+ text \n
+output 
+// CORRECT OUTPUT:
+// Hello
+// Hello World
+// 1
+// 123456789
+// 5
+// 10
+// 2
+// 9
+// 45
+// 18
+// variable x incorrectly re-initialized
+// variable y incorrectly re-initialized
+// 42
+// 43
+// variable w not declared
+// variable w incorrectly re-initialized
+// 0
+// 2

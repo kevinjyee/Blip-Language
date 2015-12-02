@@ -1,0 +1,100 @@
+var x 1
+var y 0
+var z 5
+var i 25
+var j 27
+text "testing +\n"
+output + y + x z
+text " -- should be 6\n\n"
+
+text "testing -\n"
+output - y - x z
+text " -- should be 4\n\n"
+
+text "testing *\n"
+output * x z
+text " -- should be 5\n\n"
+
+text "testing /\n"
+output / i / z x
+text " -- should be 5\n\n"
+
+text "testing %\n"
+output % 27 5
+text " -- should be 2\n\n"
+
+text "testing && false case\n"
+output && x y
+text " -- should be 0\n"
+text "testing && true case\n"
+output && x i
+text " -- should be 1\n\n"
+
+text "testing || false case\n"
+output || y y
+text " -- should be 0\n"
+text "testing || true case (both num != 0)\n"
+output || x i
+text " -- should be 1\n"
+text "testing || true case (one num == 0)\n"
+output || x y
+text " -- should be 1\n\n"
+
+text "testing < false case\n"
+output < x y
+text " -- should be 0\n"
+text "testing < true case\n"
+output < y x
+text " -- should be 1\n\n"
+
+text "testing > false case\n"
+output > y x
+text " -- should be 0\n"
+text "testing > true case\n"
+output > x y
+text " -- should be 1\n\n"
+
+text "testing <= false case\n"
+output <= x y
+text " -- should be 0\n"
+text "testing <= true case\n"
+output <= y x
+text " -- should be 1\n"
+text "testing <= true case (num are equal)\n"
+output <= x x
+text " -- should be 1\n\n"
+
+text "testing >= false case\n"
+output >= y x
+text " -- should be 0\n"
+text "testing >= true case\n"
+output >= x y
+text " -- should be 1\n"
+text "testing >= true case (num are equal)\n"
+output >= x x
+text " -- should be 1\n\n"
+
+text "testing == false case\n"
+output == y x
+text " -- should be 0\n"
+text "testing == true case\n"
+output == x x
+text " -- should be 1\n\n"
+
+text "testing != false case\n"
+output != x x
+text " -- should be 0\n"
+text "testing != true case\n"
+output != x y
+text " -- should be 1\n\n"
+
+text "testing ! false case\n"
+output ! x
+text " -- should be 0\n"
+text "testing ! true case\n"
+output ! y
+text " -- should be 1\n\n"
+
+text "testing ~\n"
+output ~ x
+text " -- should be -1\n\n"
