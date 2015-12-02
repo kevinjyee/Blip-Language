@@ -57,6 +57,15 @@ public:
 
 	uint32_t size(void) { return length; } // return the number of elements in the vector
 
+	void reset(void){
+		int i =0;
+		for(i=0; i < this->length; i+=1){
+			if(this->data[i] != 0){
+				this->data[i]="";
+
+			}
+		}
+	}
 private:
 
 

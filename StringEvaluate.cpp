@@ -115,7 +115,7 @@ int StackString(String x){
 	}
 
 	whitespacepos = length-1;
-	for(int k=0; k<count+1; k++){
+	while(whitespacepos >= 0){
 	char token[8] = {0,0,0,0,0,0,0,0};
 	int i =0;
 

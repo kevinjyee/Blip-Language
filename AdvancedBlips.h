@@ -9,6 +9,7 @@
 #define ADVANCEDBLIPS_H_
 void loopPrintString(void);
 void loopPrintNum(void);
+void loopifKeyword(void);
 void funcPrintNum(Vector* , uint32_t* );
 void funcPrintString(Vector*, uint32_t* );
 void funcSetVariable(Vector*, uint32_t*);

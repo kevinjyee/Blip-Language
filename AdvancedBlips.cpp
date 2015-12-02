@@ -465,7 +465,104 @@ void loopdoKeyword(){
 	}
 }
 
+int loopcondition(){
 
+	String evaluate(statement());
+	evaluate = looptoSubString(evaluate);
+	int value =StackString(evaluate);
+	return value;
+
+}
+void loopifSymbol(int value){
+	int nestedifflag = 0;
+	if(value){
+			while (!utstrcmp((*block)[blockpos],"fi")){
+				if(utstrcmp(next_token(),"else")){
+					while(!utstrcmp(next_token(),"fi")){
+						statement();
+					}
+					break;
+				}
+				statement();
+				String KEYWORD = (*block)[blockpos];
+
+					if (KEYWORD == m.output) {
+							loopPrintNum();
+						} else if (KEYWORD == m.text) {
+							loopPrintString();
+						} else if (KEYWORD == m.var) {
+							loopDeclareVariable();
+						} else if (KEYWORD == m.set) {
+							loopSetVariable();
+						} else if (KEYWORD == m.comments) {
+							skip_line();
+						} else if (KEYWORD == "do"){
+							loopdoKeyword();
+						}
+						else if (KEYWORD == "if"){
+							loopifKeyword();
+							nestedifflag = 1;
+						}
+						else if(KEYWORD == ""){
+
+						}
+			}
+
+			}
+		else{
+			while(!utstrcmp((*block)[blockpos],"else")){
+				if(utstrcmp((*block)[blockpos],"fi")){
+					return;
+				}
+				statement();
+			}
+			//read_next_token();
+
+			while (!utstrcmp((*block)[blockpos],"fi")){
+						statement();
+						String KEYWORD = (*block)[blockpos];
+
+							if (KEYWORD == m.output) {
+									loopPrintNum();
+								} else if (KEYWORD == m.text) {
+									loopPrintString();
+								} else if (KEYWORD == m.var) {
+									loopDeclareVariable();
+								} else if (KEYWORD == m.set) {
+									loopSetVariable();
+								} else if (KEYWORD == m.comments) {
+									skip_line();
+								} else if (KEYWORD == "do"){
+									loopdoKeyword();
+								}
+								else if (KEYWORD == "if"){
+									loopifKeyword();
+									nestedifflag = 1;
+								}
+								else if(KEYWORD == ""){
+
+								}
+					}
+
+					}
+	//if(nestedifflag ==1){nestedifflag = 0; read_next_token();}
+}
+void loopifKeyword(void){
+	statement();
+
+	int value;
+	if(utstrcmp(peek(),"SYMBOL")){
+		value = loopcondition();
+		loopifSymbol(value);
+	}
+	else if(utstrcmp(peek(),"NUMBER")){
+		value = token_number_value;
+		//read_next_token();
+		loopifSymbol(value);
+	}
+
+
+	}
 String looptoSubString(String evaluate){
 
 	do{

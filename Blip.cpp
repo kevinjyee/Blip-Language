@@ -305,7 +305,7 @@ void executeBlock(){
 			} else if (utstrcmp(keywordtype, "do")){
 				doKeyword();
 			} else if (utstrcmp(keywordtype, "if")){
-				ifKeyword();
+				loopifKeyword();
 			} else if (utstrcmp(keywordtype, "defun")){
 				functionCall();
 			} else if (utstrcmp(keywordtype, "call")){
@@ -374,6 +374,7 @@ void doKeyword(){
 
 		}
 	}
+	block->reset();
 }
 
 /*******Function: ifSymbol******
@@ -471,6 +472,7 @@ void ifKeyword(void){
 		//read_next_token();
 		ifSymbol(value);
 	}
+
 
 	}
 
