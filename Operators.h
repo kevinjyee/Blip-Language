@@ -45,6 +45,10 @@ struct symbols{
 	String sgra = "sgra";
 	String ifstmt = "if";
 	String elsestmt = "else";
+	String returnstmt = "return";
+	String defun ="defun";
+	String nufed = "nufed";
+
 };
 
 

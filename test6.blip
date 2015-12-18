@@ -1,9 +1,102 @@
-var x 1
+// Irene's debugging :-/
 
-do < x 10
-if == 0 % x 2
-output x
-text \n
+text hello\n 
+text "\t it's me\n\n"
+
+text "~~~~~ NESTED IF STATEMENT TEST 1 ~~~~~\n"
+if == 1 21
+if 0
+else 
+text "second if statement is false\n\n"
 fi
-set x + x 1
+else 
+text "first if statement is false\n\n" 
+fi
+
+text "~~~~~ NESTED IF STATEMENT TEST 2 ~~~~~\n"
+if == 1 1
+if 0
+else 
+text "second if statement is false\n\n"
+fi
+else 
+text "first if statement is false\n\n" 
+fi
+
+text "~~~~~ IF STATEMENT INSIDE DO LOOP TEST ~~~~~\n"
+var Irene 20 
+do Irene 
+if % Irene 2
+text "Irene is odd-- "
+else 
+text "Irene is even -- "
+fi
+output Irene text \n
+set Irene - Irene 1
+od 
+text \n
+
+text "~~~~~ DO LOOP INSIDE IF STATEMENT TEST 1 ~~~~~\n"
+var i 77
+text "same number should be output twice...\n" output i text \n
+if > i 77
+do i
+set i - i 1
 od
+fi
+output i text \n\n
+
+text "~~~~~ DO LOOP INSIDE IF STATEMENT TEST 2 ~~~~~\n"
+var i 77
+text "same number should not be output twice...\n" output i text \n
+if > i 7
+do i
+set i - i 1
+od
+fi
+output i text \n\n
+
+text "~~~~~ DO LOOP INSIDE DO LOOP TEST ~~~~~\n"
+var v1 4
+var v2 3
+do v1 
+text "v1 is " output v1 text \n
+do v2
+text "\tv2 is " output v2 text \n
+set v2 - v2 1
+od
+set v2 3
+set v1 - v1 1
+od
+text \n\n
+
+// ~~~~~ DEFINING FUNCTIONS ~~~~~
+defun booooo params smarap
+text "this should print only when function is called\n"
+set v1 100
+return 12
+nufed
+
+defun hello params smarap
+text "Hello World\n"
+defun bye params smarap
+text "Goodbye\n"
+nufed
+nufed
+
+text "~~~~~ BASIC FUNCTION TEST ~~~~~\n"
+text "v1 is --- "
+output v1 text \n
+set v1 + v1 call booooo args sgra
+text "v1 is now --- "
+output v1 text \n\n
+
+text "~~~~~ FUNCTION WITHIN FUNCTION TEST ~~~~~\n"
+var not_used call hello args sgra
+text "calling nested function ... (is this supposed to work???)\n"
+set not_used call bye args sgra
+text \n\n
+
+text "~~~~~ END OF TEST ~~~~~\n"
+
+

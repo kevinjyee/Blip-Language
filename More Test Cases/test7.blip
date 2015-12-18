@@ -10,7 +10,7 @@ var f 1
 var g 1
 var h 1
 
-do < x 10
+do < x 10000
 	set x + x 1
 	set y + x 1
 	set z + y 1

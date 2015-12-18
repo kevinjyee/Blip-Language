@@ -17,12 +17,12 @@ struct symbols m;
 HashTable<LinkedHashEntry,String> Map;
 HashTable<LinkedHashEntry,String> Map2;
 Hashdefun<HashFunction,String> Func;
-Vector* block = new Vector();
+//Vector* block = new Vector();
 Vector* arguments = new Vector();
 int array[10]= {0,0,0,0,0,0,0,0,0,0};
 
 int HashTableFlag =0;
-uint32_t blockpos = 0;
+//uint32_t blockpos = 0;
 //uint32_t funpos =0;
 
 /*******Function: stopEval*********
@@ -40,7 +40,10 @@ bool stopEval(String next){
 	   next==m.elsestmt ||
 	   next == m.ifstmt||
 	   next == m.dostmt||
-	   next == m.od){
+	   next == m.od||
+	   next == m.returnstmt||
+	   next == m.defun||
+	   next == m.nufed){
 				return true;
 				}
 	return false;
@@ -181,11 +184,15 @@ void PrintNum(void){
 	if(next_token_type == NUMBER){
 		printf("%d",token_number_value);
 	}
+	else if(utstrcmp(next_token(),"call")){
+		int value = Jumpto();
+		printf("%d",value);
+	}
 
 	else if(next_token_type == NAME){
 		String key(next_token());
 		int value = Map.get(key);
-		if(value == -1){printf("WARNING Variable is undeclared\n");}
+		if(value == -1){printf("variable %s not declared\n",key.c_str());}
 		else{
 
 		printf("%d",value);
@@ -217,7 +224,7 @@ read_next_token();
 if(next_token_type == NUMBER){
 	LinkedHashEntry Entry(variable, token_number_value);
 	if(!Map.put(Entry)){
-		printf("WARNING. Variable has already been declared\n");
+		printf("variable %s incorrectly re-initialized\n",variable.c_str());
 	}
 	}
 
@@ -228,7 +235,7 @@ else if(next_token_type == SYMBOL){
 	//whitespacepos =0;
 LinkedHashEntry Entry(variable, value);
 if(!Map.put(Entry)){
-	printf("WARNING. Variable has already been declared\n");
+	printf("variable %s incorrectly re-initialized\n",variable.c_str());
 }
 
 }
@@ -236,11 +243,11 @@ else if(next_token_type == NAME){
 	int value = Jumpto();
 	LinkedHashEntry Entry(variable, value);
 	if(!Map.put(Entry)){
-			printf("WARNING. Variable has already been declared\n");
+			printf("variable %s incorrectly re-initialized\n",variable.c_str());
 		}
 }
 else{
-		printf("Variable cannot be evaluated\n");
+		printf("variable %s incorrectly re-initialized\n",variable.c_str());
 
 }
 }
@@ -276,7 +283,7 @@ else if(next_token_type == NAME){
 }
 
 else{
-		printf("Variable cannot be evaluated\n");
+		printf("variable %s not declared\n",variable.c_str());
 
 }
 }
@@ -286,35 +293,40 @@ else{
  * Executes block in a loop
  */
 
-void executeBlock(){
-	blockpos = 0;
+void executeBlock(Vector* block){
+	uint32_t blockpos = 0;
 
-	while (!utstrcmp((*block)[blockpos],"od")){
+	while (true){
 		char* keywordtype = (*block)[blockpos];
 
 			if (utstrcmp(keywordtype, "output")) {
-				loopPrintNum();
+				loopPrintNum(block,&blockpos);
 			} else if (utstrcmp(keywordtype, "text")) {
-				loopPrintString();
+				loopPrintString(block,&blockpos);
 			} else if (utstrcmp(keywordtype, "var")) {
-				DeclareVariable();
+				loopDeclareVariable(block,&blockpos);
 			} else if (utstrcmp(keywordtype, "set")) {
-				loopSetVariable();
+				loopSetVariable(block,&blockpos);
 			} else if (utstrcmp(keywordtype, "//")) {
 				skip_line();
 			} else if (utstrcmp(keywordtype, "do")){
-				doKeyword();
+				loopdoKeyword(block,&blockpos);
+				countdo +=1;
 			} else if (utstrcmp(keywordtype, "if")){
-				loopifKeyword();
+				loopifKeyword(block,&blockpos);
 			} else if (utstrcmp(keywordtype, "defun")){
-				functionCall();
+				loopfunctionCall(block,&blockpos,0);
 			} else if (utstrcmp(keywordtype, "call")){
-				Jumpto();
+				loopJumpto(block,&blockpos);
 			}
 			else{
 
 			}
-			if(utstrcmp((*block)[blockpos],"od")){break;}
+			if(utstrcmp((*block)[blockpos],"od") && countdo == 0){break;
+			}
+			else{
+				if(utstrcmp((*block)[blockpos], "od")){countdo -=1;}
+			}
 			blockpos +=1;
 
 	}
@@ -337,19 +349,50 @@ int condition(){
  * Puts the expressions into a vector
  */
 
-void saveBlock(){
+Vector* saveBlock(){
+	Vector* block = new Vector();
    // read_next_token();
+	int peekflag =0;
     while (!utstrcmp((char*)next_token(),"od")) {
+    	if(utstrcmp((char*)next_token(),"do")){
+    		peekflag =1;
+    		while (!utstrcmp((char*)next_token(),"od")){
+    			String* temp = new String((char*) next_token());
+    			        block->push_back((char*) temp->c_str());
+    			        read_next_token();
+    			        String next(peek_next_token());
+    			        	if(stopEval(next)){
+    			        		block->push_back(" ");
+    			        		}
+    		}
+    		read_next_token();
+    	String* temp = new String((char*) next_token());
+    	block->push_back((char*) temp->c_str());
+    	read_next_token();
+    		//peek_next_token();
+
+    	}
+    	else{
         String* temp = new String((char*) next_token());
         block->push_back((char*) temp->c_str());
         read_next_token();
+        if(peekflag ==0){
         String next(peek_next_token());
         	if(stopEval(next)){
         		block->push_back(" ");
         		}
+        }
+        else{
+        	String next(next_token());
+        	if(stopEval(next)){
+        		block->push_back(" ");
+        	}
+        }
+    	}
 
     }
     block->push_back("od");
+    return block;
 }
 
 
@@ -361,12 +404,12 @@ void doKeyword(){
 	if(next_token_type == SYMBOL){
 		//String evaluate(next_token());
 		String evaluate("");
-		 evaluate = toSubStringCopy(evaluate);//saved as String
-		saveBlock(); //saves the loop inside
+		evaluate = toSubStringCopy(evaluate);//saved as String
+		Vector* block = saveBlock(); //saves the loop inside
 		String debug1;
 		int debug2;
 		while(StackString(returnwithHash(evaluate.c_str()))){
-			executeBlock();
+			executeBlock(block);
 			debug1= returnwithHash(evaluate.c_str());
 			debug2= StackString(returnwithHash(evaluate.c_str()));
 			stack.reset();
@@ -374,7 +417,21 @@ void doKeyword(){
 
 		}
 	}
-	block->reset();
+	else if(next_token_type == NUMBER){
+		Vector* block = saveBlock();
+		int x = token_number_value;
+		while(x){
+			executeBlock(block);
+		}
+	}
+
+	else if (next_token_type == NAME){
+		String variable(next_token());
+		Vector* block = saveBlock();
+		while(Map.get(variable)){
+			executeBlock(block);
+		}
+	}
 }
 
 /*******Function: ifSymbol******
@@ -383,6 +440,7 @@ void doKeyword(){
 
 void ifSymbol(int value){
 	int nestedifflag = 0;
+	int nestedelseflag =0;
 	if(value){
 			while (!utstrcmp(next_token(),"fi")){
 				if(utstrcmp(next_token(),"else")){
@@ -410,6 +468,10 @@ void ifSymbol(int value){
 						else if (KEYWORD == "if"){
 							ifKeyword();
 							nestedifflag = 1;
+							read_next_token();
+						}
+						else if(KEYWORD == "defun"){
+							functionCall();
 						}
 						else if(KEYWORD == ""){
 
@@ -419,10 +481,17 @@ void ifSymbol(int value){
 			}
 		else{
 			while(!utstrcmp(next_token(),"else")){
+				if(utstrcmp(next_token(),"if")){
+					while(!utstrcmp(next_token(),"fi")){
+						read_next_token();
+					}
+					nestedelseflag = 1;
+					read_next_token();
+				}
 				if(utstrcmp(next_token(),"fi")){
 					return;
 				}
-				read_next_token();
+				if (nestedelseflag == 0){read_next_token();}
 			}
 			//read_next_token();
 
@@ -446,6 +515,10 @@ void ifSymbol(int value){
 								else if (KEYWORD == "if"){
 									ifKeyword();
 									nestedifflag = 1;
+									read_next_token();
+								}
+								else if (KEYWORD == "defun"){
+									functionCall();
 								}
 								else if(KEYWORD == ""){
 
@@ -470,6 +543,16 @@ void ifKeyword(void){
 	else if(next_token_type == NUMBER){
 		value = token_number_value;
 		//read_next_token();
+		ifSymbol(value);
+	}
+	else if(utstrcmp(next_token(),"call")){
+		value = Jumpto();
+
+				ifSymbol(value);
+	}
+	else if(next_token_type == NAME){
+		String variable(next_token());
+		value = Map.get(variable);
 		ifSymbol(value);
 	}
 
@@ -548,14 +631,23 @@ bool IS_KEYWORD(char* t) {
     }else if(utstrcmp(t,"nufed")){
     	return true;
     }
+    else if(utstrcmp(t,"od")){
+    	return true;
+    }
+    else if(utstrcmp(t, "fi")){
+    	return true;
+    }
+    else if(utstrcmp(t,"defun")){
+    	return true;
+    }
     return false;
 }
 
-char* statement(){
+char* statement(Vector* block, uint32_t* blockpos){
 
 
-    char* syntax = (*block)[blockpos];
-    blockpos = blockpos + 1;
+    char* syntax = (*block)[*blockpos];
+    *blockpos = *blockpos + 1;
     if (IS_NUMBER(syntax[0])) {
         next_token_type = NUMBER;
         token_number_value = atoi(syntax);
@@ -574,12 +666,13 @@ char* statement(){
 
 
 
-char* peek(){
-	int peeknumber = blockpos;
+char* peek(Vector* block,uint32_t*blockpos){
+	int peeknumber = *blockpos;
 	//peeknumber += 1;
 	char* syntax = (*block)[peeknumber];
 	if (IS_NUMBER(syntax[0])) {
-	        return "NUMBER";
+		token_number_value = atoi(syntax);
+		return "NUMBER";
 
 	    } else if (utstrcmp(syntax, "//")){
 	        return "COMMENT";
@@ -587,6 +680,9 @@ char* peek(){
 	        return "SYMBOL";
 	    } else if (IS_KEYWORD(syntax)) {
 	        return "KEYWORD";
+	    }
+	    else if(utstrcmp(syntax,"call")){
+	    	return "CALL";
 	    }
 	    else if (IS_LETTER(syntax[0])){
 	        	return "NAME";

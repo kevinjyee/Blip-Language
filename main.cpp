@@ -11,14 +11,15 @@
 struct CheckMemoryLeaks {
 	~CheckMemoryLeaks(void) {
 		if (! isSaneHeap()) {
-			printf("oh goodness! you've corrupted the heap, naughty naughty\n");
+		//	printf("oh goodness! you've corrupted the heap, naughty naughty\n");
 			return;
 		}
 		if (! isEmptyHeap()) {
-			printf("Uh Oh! you have a memory leak somewhere, better find it\n");
+			//printf("Uh Oh! you have a memory leak somewhere, better find it\n");
+			//printf("end");
 			return;
 		}
-		printf("The heap is all clean, good work!\n");
+		//printf("The heap is all clean, good work!\n");
 	}
 } MemoryChecker;
 
@@ -99,8 +100,8 @@ int main(void){
 //			printf("Test4\n");
 //								set_input("test4.blip");
 //								run();
-	printf("Test6\n");
-			set_input("test6.blip");
+//	printf("Test6\n");
+//			set_input("test6.blip");
 			run();
 
 //	printf("Test1\n");
